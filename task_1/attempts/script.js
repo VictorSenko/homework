@@ -1,76 +1,86 @@
 class Sorter {
-    constructor(arr){
-        this.arr = arr;
+    constructor(arr) {
+        
+        this.arr = arr; 
     }
+    
     add() {
         this.arr.push(...arguments);
         return this.arr.length;
+
     }
     length() {
         return this.arr.length;
     }
-    sort(func) {
-       
-        this.arr.sort(func);
-    }
-    map() {
-        return this.arr.map(function (item) {
-            item += 1;
-            item = item +"";
-            return item;
-        });
-       
-    }
-    filter() {
-        return this.arr.filter(function (item, i) {
-            if (typeof (item) === 'number') {
-                return item;
+    sort(callback) {
+        for (let i = 0, counter = this.arr.length, len = this.arr.length; i < len; i++,counter--) {
+            for (let j = 0; j < counter; j++) {
+                if (typeof callback === 'function') {
+                    if (callback(this.arr[j], this.arr[j + 1]) === 1) {
+                        let a = this.arr[j + 1];
+                        this.arr[j + 1] = this.arr[j];
+                        this.arr[j] = a;
+                    };
+                }else if ((this.arr[j]+'') > (this.arr[j + 1]+'')) {
+                    let a = this.arr[j + 1];
+                    this.arr[j + 1] = this.arr[j];
+                    this.arr[j] = a;
+                }
             }
-        });
+        }
     }
-    pushArray(array) {
-        this.arr.push(...array);
+    map(callback) {
+        for (let i = 0, len = this.arr.length; i < len; i++) {
+            this.arr[i] = callback(this.arr[i], i, this.arr)[0];
+        }
+    }
+    filter(callback) {
+        for (let i = 0, len = this.arr.length; i < len; i++) {
+            if (callback(this.arr[i], i, this.arr) === false) {
+                this.arr.splice(i, 1);
+            }
+        }
+    }
+    pushArray(arr) {
+        this.arr.push(...arr);
     }
 }
-let arr = [1, 2, 3];
 
-let sorter = new Sorter(arr);
+let a = [1, 12, 5, 24,-9];
+sorter = new Sorter(a);
+console.log(sorter.valueOf());
 
-//add
-let addFunctionResult = sorter.add(1, '2', '3', '123');
 
-console.log(arr);
-console.log(addFunctionResult);
+/*add
 
-//length
+console.log(sorter.add(1, 2, 3)); */
 
-let len = sorter.length();
-console.log(len);
+/*length
 
-let qwe = new Sorter([2, 6]);
-qwe.add(...arr);
-console.log(qwe.length());
+console.log(sorter.length()); */
 
-//sort
-function compareNumeric(a, b) {
-    if (a > b) return 1;
-    if (a < b) return -1;
+/*sort
+function sor(a, b) {
+    return a < b ? 1 : -1;
 }
+sorter.sort(sor);
+console.log(sorter); */
 
-qwe.sort(compareNumeric);
-console.log(qwe);
-//map
+/*map
+sorter.map(function (el, i) {
+    el = el + i;
+    return arguments;
+});
+console.log(sorter); */
 
-let newArr = qwe.map();
-console.log(newArr);
+/*filter
+sorter.filter(function (el) {
+    return el > 0;
+});
 
-//filter
-let filtredArr = qwe.filter();
-console.log(filtredArr);
+console.log(sorter); */
 
-//pushArray
-
-let newArray = [2, 6, 10];
-
-qwe.pushArray(newArray);
-console.log(qwe);
+/* pushArray
+let b = [1, 2, 5];
+sorter.pushArray(b);
+console.log(sorter); */
